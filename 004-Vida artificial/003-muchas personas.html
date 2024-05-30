@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <canvas id="lienzo" width="640" height="480"></canvas>
+    <script>
+        var anchura = 512;
+        var altura = 512;
+        document.getElementById("lienzo").width = anchura
+        document.getElementById("lienzo").height = altura
+        var contexto = document.getElementById("lienzo").getContext("2d") 
+        
+        class Persona{
+            constructor(){
+                this.x = Math.random()*anchura;
+                this.y = Math.random()*altura
+            }
+            
+            dibuja(contexto){
+                contexto.fillRect(this.x,this.y,2,2)
+            }
+        }
+        let personas = []
+        for(let i = 0;i<50;i++){
+            personas[i] = new Persona();
+            personas[i].dibuja(contexto);
+        } 
+        
+        
+    </script>
+</body>
+</html>

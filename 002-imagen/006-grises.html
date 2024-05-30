@@ -1,0 +1,37 @@
+<html>
+    <body>
+        <video id="video" width="640" height="480" autoplay></video>
+        <canvas id="lienzo" width="640" height="480"></canvas>
+        <script>
+            const video = document.getElementById('video');
+            const lienzo = document.getElementById('lienzo');
+            const contexto = lienzo.getContext('2d', { willReadFrequently: true });
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then((stream) => {
+                    video.srcObject = stream;
+                    video.play();
+                })
+                
+            function dibuja() {
+                contexto.drawImage(video, 0, 0, lienzo.width, lienzo.height);
+                let primerpixel = contexto.getImageData(0,0,lienzo.width,lienzo.height);
+                let datos = contexto.getImageData(0,0,lienzo.width,lienzo.height);
+                datos = grises(datos);
+                contexto.putImageData(datos,0,0);
+                requestAnimationFrame(dibuja);
+            }
+
+            video.addEventListener('play', () => {
+                dibuja();
+            });
+            function grises(datos){
+                for(let i = 0;i<datos.data.length;i+=4){
+                    datos.data[i+1] = datos.data[i]
+                    datos.data[i+2] = datos.data[i]
+                }
+                return datos;
+            }
+        </script>
+    </body>
+</html>

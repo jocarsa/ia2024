@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motion Detection</title>
+</head>
+<body>
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="lienzo" width="640" height="480"></canvas>
+    <script>
+        const video = document.getElementById('video');
+        const lienzo = document.getElementById('lienzo');
+        const contexto = lienzo.getContext('2d', { willReadFrequently: true });
+        let anteriores = null;
+        let fotograma = 0;
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => {
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch((err) => {
+                console.error("Error accessing the webcam: ", err);
+            });
+
+        function dibuja() {
+            contexto.drawImage(video, 0, 0, lienzo.width, lienzo.height);
+            let datos = contexto.getImageData(0, 0, lienzo.width, lienzo.height);
+            
+            if (fotograma > 0) {
+                datos = movimiento(datos);
+            }
+
+            contexto.putImageData(datos, 0, 0);
+            fotograma++;
+            requestAnimationFrame(dibuja);
+        }
+
+        video.addEventListener('play', () => {
+            dibuja();
+        });
+
+        function movimiento(datos) {
+            let temporal = contexto.createImageData(datos);
+            if (anteriores) {
+                for (let i = 0; i < datos.data.length; i += 4) {
+                    if (Math.abs(datos.data[i] - anteriores.data[i]) < 55) {
+                        temporal.data[i] = 255;
+                        temporal.data[i + 1] = 255;
+                        temporal.data[i + 2] = 255;
+                        temporal.data[i + 3] = 255;
+                    } else {
+                        temporal.data[i] = 0;
+                        temporal.data[i + 1] = 0;
+                        temporal.data[i + 2] = 0;
+                        temporal.data[i + 3] = 255;
+                    }
+                }
+            }
+            anteriores = contexto.createImageData(datos);
+            anteriores.data.set(datos.data);
+            return temporal;
+        }
+    </script>
+</body>
+</html>
