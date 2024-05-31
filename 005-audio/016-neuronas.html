@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Microphone Data Capture</title>
+</head>
+<body>
+    <h1>Lo que oigo es: <span id="resultado"></span></h1>
+    <canvas id="lienzo0" width=1024 height=100></canvas>
+    <canvas id="lienzo" width=1024 height=100></canvas>
+    <canvas id="neuronas" width=512 height=512></canvas>
+    <input type="text" id="nombre">
+    <button id="enviar">Enviar</button>
+    <script>
+        var memoria = []
+        var activacion;
+        var contexto = document.getElementById("lienzo").getContext("2d")
+        var contexto0 = document.getElementById("lienzo0").getContext("2d")
+        var contextoneuronas = document.getElementById("neuronas").getContext("2d")
+        var neuronas = []
+        neuronas.push("001001001")
+        neuronas.push("001001010")
+        neuronas.push("001001100")
+        neuronas.push("001001001")
+        neuronas.push("001010010")
+        neuronas.push("001100100")
+        
+        neuronas.push("010001001")
+        neuronas.push("010001010")
+        neuronas.push("010001100")
+        neuronas.push("010001001")
+        neuronas.push("010010010")
+        neuronas.push("010100100")
+        
+        neuronas.push("100001001")
+        neuronas.push("100001010")
+        neuronas.push("100001100")
+        neuronas.push("100001001")
+        neuronas.push("100010010")
+        neuronas.push("100100100")
+        
+        console.log(neuronas)
+        var neuronasdib = []
+        for(let i = 0;i<neuronas.length;i++){
+            neuronasdib.push({x:Math.random()*512,y:Math.random()*512,r:5})
+        }
+        async function getMicrophoneData() {
+            try {
+                // Defino un flujo de entrada constante
+                const flujo = await navigator.mediaDevices.getUserMedia({ audio: true });
+                // Capturo el contexto (los datos) de ese flujo
+                const contextoaudio = new (window.AudioContext || window.webkitAudioContext)();
+                // Defino la fuente del flujo
+                 const fuente = contextoaudio.createMediaStreamSource(flujo);
+                // Especifico cual es el tamaño de bloque que voy a atrapar
+                const tamanoMuestra = 1024;
+                // Proceso bloque a bloque el audio que está entrando
+                const procesador = contextoaudio.createScriptProcessor(tamanoMuestra, 1, 1);
+                // Conecto el audio
+                fuente.connect(procesador);
+                // Conecto el procesador de audio
+                procesador.connect(contextoaudio.destination);
+                // Cada vez que me lleguen datos ejecuto esta funcion
+                procesador.onaudioprocess = function(event) {
+                    // Capturo el buffer de entrada (es decir el pack de datos)
+                    const bufferEntrada = event.inputBuffer;
+                    // Cojo unicamente el canal izquierdo, o sea, el canal 0
+                    const datosEntrada = bufferEntrada.getChannelData(0);
+                    // Lo lanzo por pantalla
+                    
+                    contexto.clearRect(0,0,1024,100)
+                    contexto0.fillStyle = "rgba(255,255,255,0.02)"
+                    
+                        contexto0.fillRect(0,0,1024,100)
+                    contexto0.fillStyle = "black"
+                    for(let i = 0;i<datosEntrada.length;i++){
+                        
+                        if(i%2 == 0){
+                            contexto0.fillRect(i,50,1,datosEntrada[i]*100)
+                         }
+                        datosEntrada[i] = Math.round(datosEntrada[i]*50)
+                        contexto.fillStyle = valueToRgb(datosEntrada[i]+0.5);
+                        contexto.fillRect(i,50,2,datosEntrada[i]*50)
+                    }
+                    activacion = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                    for(let i = 0;i<datosEntrada.length;i++){
+                        
+                        let neurona = ""
+                        for(let j = i;j<i+3;j++){
+                            if(Math.round(datosEntrada[j]*50) > 1){
+                                neurona+="100"
+                            }
+                            else if(Math.round(datosEntrada[j]*50) == 0){
+                                neurona+="010"
+                            }
+                            else if(Math.round(datosEntrada[j]*50) < 1){
+                                neurona+="001"
+                            }
+                            
+                            
+                        }
+                        for(let j = 0;j<neuronas.length;j++){
+                            //console.log(neurona,neuronas[j])
+                            if(neurona == neuronas[j]){
+                                activacion[j]++
+                            }
+                        }
+                        
+                    }
+                    contextoneuronas.clearRect(0,0,512,512)
+                    for(let i = 0;i<neuronas.length;i++){
+                        
+                        contextoneuronas.beginPath()
+                        contextoneuronas.arc(neuronasdib[i].x,neuronasdib[i].y,activacion[i]/10+5,0,Math.PI*2)
+                        contextoneuronas.fill()
+                        contextoneuronas.beginPath()
+                        contextoneuronas.moveTo(neuronasdib[i].x,neuronasdib[i].y)
+                        contextoneuronas.lineTo(neuronasdib[i+1].x,neuronasdib[i+1].y)
+                        contextoneuronas.stroke()
+                    }
+                    
+                    mejorcandidato = 0
+                    suma = 10000000
+                    for(let t = 0;t<memoria.length;t++){
+                        misuma = 0
+                        for(let u = 0;u<memoria[t].datos.length;u++){
+                            misuma += Math.abs(memoria[t].datos[u] - activacion[u])
+                        }
+                        if(misuma < suma){
+                            suma = misuma
+                            mejorcandidato = t
+                        }
+                    }
+                    document.getElementById("resultado").innerHTML = memoria[mejorcandidato].nombre
+                };
+            } catch (err) {
+                console.error('Error accessing the microphone', err);
+            }
+        }
+
+        getMicrophoneData();
+        
+        document.getElementById("enviar").onclick = function(){
+            let nombre = document.getElementById("nombre").value
+            memoria.push({"nombre":nombre,datos:activacion})
+            console.log(memoria)
+        }
+        
+        function valueToRgb(value) {
+            // Ensure the value is within the 0-1 range
+            value = Math.max(0, Math.min(1, value));
+
+            // Define the start and end colors (blue to red in this example)
+            const startColor = { r: 0, g: 0, b: 255 }; // Blue
+            const endColor = { r: 255, g: 0, b: 0 }; // Red
+
+            // Calculate the RGB values based on the value
+            const r = Math.round(startColor.r + value * (endColor.r - startColor.r));
+            const g = Math.round(startColor.g + value * (endColor.g - startColor.g));
+            const b = Math.round(startColor.b + value * (endColor.b - startColor.b));
+
+            return `rgb(${r},${g},${b})`;
+        }
+        function roundToDecimals(num, decimals) {
+            return Number(num.toFixed(decimals));
+        }
+    </script>
+</body>
+</html>
