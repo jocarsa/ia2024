@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Microphone Data Capture</title>
+</head>
+<body>
+    <canvas id="lienzo" width=1024 height=100></canvas>
+    <script>
+        function decimalToBinaryWithLeadingZeros(decimal, leadingZeros = 9) {
+            // Convierte el número decimal a binario
+            let binary = decimal.toString(2);
+
+            // Añade ceros a la izquierda para asegurarse de que tiene al menos leadingZeros+1 longitud
+            while (binary.length < leadingZeros + 1) {
+                binary = '0' + binary;
+            }
+
+            return binary;
+        }
+        var contexto = document.getElementById("lienzo").getContext("2d")
+        var neuronas = []
+        for(let n = 0;n<512;n++){
+            neuronas.push(decimalToBinaryWithLeadingZeros(n))
+        }
+        console.log(neuronas)
+        async function getMicrophoneData() {
+            try {
+                // Defino un flujo de entrada constante
+                const flujo = await navigator.mediaDevices.getUserMedia({ audio: true });
+                // Capturo el contexto (los datos) de ese flujo
+                const contextoaudio = new (window.AudioContext || window.webkitAudioContext)();
+                // Defino la fuente del flujo
+                 const fuente = contextoaudio.createMediaStreamSource(flujo);
+                // Especifico cual es el tamaño de bloque que voy a atrapar
+                const tamanoMuestra = 1024;
+                // Proceso bloque a bloque el audio que está entrando
+                const procesador = contextoaudio.createScriptProcessor(tamanoMuestra, 1, 1);
+                // Conecto el audio
+                fuente.connect(procesador);
+                // Conecto el procesador de audio
+                procesador.connect(contextoaudio.destination);
+                // Cada vez que me lleguen datos ejecuto esta funcion
+                procesador.onaudioprocess = function(event) {
+                    // Capturo el buffer de entrada (es decir el pack de datos)
+                    const bufferEntrada = event.inputBuffer;
+                    // Cojo unicamente el canal izquierdo, o sea, el canal 0
+                    const datosEntrada = bufferEntrada.getChannelData(0);
+                    // Lo lanzo por pantalla
+                    
+                    contexto.clearRect(0,0,1024,100)
+                    for(let i = 0;i<datosEntrada.length;i++){
+                        datosEntrada[i] = Math.round(datosEntrada[i]*50)
+                        contexto.fillStyle = valueToRgb(datosEntrada[i]+0.5);
+                        contexto.fillRect(i,50,2,datosEntrada[i]*50)
+                    }
+                    
+                    for(let i = 0;i<datosEntrada.length;i+=3){
+                        let neurona = ""
+                        for(let j = i;j<i+3;j++){
+                            switch(Math.round(datosEntrada[j]*50)){
+                                case -1:
+                                    neurona+="100"
+                                    break;
+                                case 0:
+                                    neurona+="010"
+                                    break;
+                                case 1:
+                                    neurona+="001"
+                                    break;
+                            }
+                            
+                        }
+                        console.log(neurona)
+                    }
+                    //console.log(datosEntrada)
+                };
+            } catch (err) {
+                console.error('Error accessing the microphone', err);
+            }
+        }
+
+        getMicrophoneData();
+        
+        function valueToRgb(value) {
+            // Ensure the value is within the 0-1 range
+            value = Math.max(0, Math.min(1, value));
+
+            // Define the start and end colors (blue to red in this example)
+            const startColor = { r: 0, g: 0, b: 255 }; // Blue
+            const endColor = { r: 255, g: 0, b: 0 }; // Red
+
+            // Calculate the RGB values based on the value
+            const r = Math.round(startColor.r + value * (endColor.r - startColor.r));
+            const g = Math.round(startColor.g + value * (endColor.g - startColor.g));
+            const b = Math.round(startColor.b + value * (endColor.b - startColor.b));
+
+            return `rgb(${r},${g},${b})`;
+        }
+        function roundToDecimals(num, decimals) {
+            return Number(num.toFixed(decimals));
+        }
+    </script>
+</body>
+</html>

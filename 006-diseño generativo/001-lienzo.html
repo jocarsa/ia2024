@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <style>
+        html,body{overflow:hidden;}
+    </style>
+    <canvas id="lienzo" width="640" height="480"></canvas>
+    <input type="range" min=0 max=2000 id=peso> Peso del proyectil<br>
+    <input type="range" min=0 max=2000 id=distancia> Distancia del proyectil<br>
+    <script>
+        var anchura = 1024;
+        var altura = 512;
+        document.getElementById("lienzo").width = anchura
+        document.getElementById("lienzo").height = altura
+        var contexto = document.getElementById("lienzo").getContext("2d")
+        var disparador = {"x":0,"y":0,"a":0,v:5}
+        var objetivo = {"x":1000,"y":0}
+        console.log(disparador)
+        contexto.fillRect(disparador.x,500-disparador.y,2,2)
+        contexto.fillRect(objetivo.x,500-objetivo.y,2,2)
+        
+    </script>
+</body>
+</html>

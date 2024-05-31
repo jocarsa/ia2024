@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <canvas id="lienzo" width="640" height="480"></canvas>
+    <script>
+        var anchura = 512;
+        var altura = 512;
+        document.getElementById("lienzo").width = anchura
+        document.getElementById("lienzo").height = altura
+        var contexto = document.getElementById("lienzo").getContext("2d") 
+        
+        class Persona{
+            constructor(){
+                this.x = Math.random()*anchura;
+                this.y = Math.random()*altura
+                this.a = Math.random()*Math.PI*2
+                this.r = Math.round(Math.random()*255)
+                this.g = Math.round(Math.random()*255)
+                this.b = Math.round(Math.random()*255)
+            }
+            mueve(){
+                this.x += Math.cos(this.a)
+                this.y += Math.sin(this.a)
+            }
+            dibuja(contexto){
+                contexto.fillStyle = "rgb("+this.r+","+this.g+","+this.b+")"
+                contexto.fillRect(this.x,this.y,2,2)
+            }
+        }
+        // Creo un conjunto de personas
+        let personas = []
+        // Les asigno una instancia de persona
+        for(let i = 0;i<50;i++){
+            personas[i] = new Persona();
+        } 
+        var temporizador = setTimeout("bucle()",1000)
+        function bucle(){
+            contexto.fillStyle = "rgba(255,255,255,0.1)"
+            contexto.fillRect(0,0,anchura,altura)
+            // Para cada una de las personas
+            for(let i = 0;i<50;i++){
+                // Mueve a la persona
+                personas[i].mueve();
+                // Dibuja a la persona
+                personas[i].dibuja(contexto);
+            } 
+            clearTimeout(temporizador)
+            temporizador = setTimeout("bucle()",100)
+        }
+        
+    </script>
+</body>
+</html>

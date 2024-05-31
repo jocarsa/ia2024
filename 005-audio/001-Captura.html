@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Microphone Data Capture</title>
+</head>
+<body>
+    <script>
+        async function getMicrophoneData() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const contextoaudio = new (window.AudioContext || window.webkitAudioContext)();
+                const source = contextoaudio.createMediaStreamSource(stream);
+                const bufferSize = 1024;
+                const scriptProcessor = audioContext.createScriptProcessor(bufferSize, 1, 1);
+                source.connect(scriptProcessor);
+                scriptProcessor.connect(audioContext.destination);
+                scriptProcessor.onaudioprocess = function(event) {
+                    const inputBuffer = event.inputBuffer;
+                    const inputData = inputBuffer.getChannelData(0);
+                };
+            } catch (err) {
+                console.error('Error accessing the microphone', err);
+            }
+        }
+
+        getMicrophoneData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <canvas id="lienzo" width="640" height="480"></canvas>
+    <script>
+        function calculoRebotePared(incidentAngleInRadians, wallType) {
+            let reflectedAngleInRadians;
+
+            if (wallType === 'vertical') {
+                // Rebote en una pared vertical: el ángulo reflejado es -incidentAngleInRadians (reflexión horizontal)
+                reflectedAngleInRadians = Math.atan2(Math.sin(incidentAngleInRadians), -Math.cos(incidentAngleInRadians));
+            } else if (wallType === 'horizontal') {
+                // Rebote en una pared horizontal: el ángulo reflejado es π - incidentAngleInRadians (reflexión vertical)
+                reflectedAngleInRadians = Math.atan2(-Math.sin(incidentAngleInRadians), Math.cos(incidentAngleInRadians));
+            } else {
+                throw new Error('Tipo de pared no válido. Usa "vertical" u "horizontal".');
+            }
+
+            // Ajustamos el ángulo para que esté en el rango [0, 2π)
+            if (reflectedAngleInRadians < 0) {
+                reflectedAngleInRadians += 2 * Math.PI;
+            }
+
+            return reflectedAngleInRadians;
+        }
+        function calculaDistancia(x1, y1, x2, y2) {
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+        function anguloEntreDosPuntos(x1, y1, x2, y2) {
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            return angleInRadians = Math.atan2(dy, dx);
+            //const angleInDegrees = angleInRadians * (180 / Math.PI);
+            //return angleInDegrees;
+        }
+        var anchura = window.innerWidth;
+        var altura = window.innerHeight;
+        document.getElementById("lienzo").width = anchura
+        document.getElementById("lienzo").height = altura
+        var contexto = document.getElementById("lienzo").getContext("2d") 
+        class Comida{
+            constructor(){
+                this.x = Math.random()*anchura;
+                this.y = Math.random()*altura
+            }
+            dibuja(contexto){
+                contexto.fillStyle = "red"
+                contexto.beginPath()     
+                contexto.arc(this.x,this.y,5,0,Math.PI*2)
+                contexto.fill()
+            }
+        }
+        class Persona{
+            constructor(){
+                this.x = Math.random()*anchura;
+                this.y = Math.random()*altura
+                this.a = Math.random()*Math.PI*2
+                this.r = Math.round(Math.random()*255)
+                this.g = Math.round(Math.random()*255)
+                this.b = Math.round(Math.random()*255)
+                this.e = Math.random()*100
+                this.d = (Math.random()-0.5)/10
+            }
+            mueve(){
+                if(this.e > 10){
+                    this.d += (Math.random()-0.5)/10
+                    this.a += this.d
+                }
+                
+                this.x += Math.cos(this.a)
+                this.y += Math.sin(this.a)
+                this.e -= 0.1
+                this.rebotePared()
+            }
+            getEnergia(){
+                return this.e;
+            }
+            dibuja(contexto){
+                contexto.fillStyle = "rgb("+this.r+","+this.g+","+this.b+")"
+                contexto.fillRect(this.x,this.y,2,2)
+            }
+            buscaComida(comidas){
+                let mejorcandidato = 0
+                let mejordistancia = 1000000
+                for(let i = 0;i<comidas.length;i++){
+                    let distancia = calculaDistancia(this.x,this.y,comidas[i].x,comidas[i].y)
+                    if(distancia < mejordistancia){
+                        mejorcandidato = i;
+                        mejordistancia = distancia
+                    }
+                }
+                /*contexto.beginPath()
+                contexto.moveTo(this.x,this.y)
+                contexto.lineTo(comidas[mejorcandidato].x,comidas[mejorcandidato].y)
+                contexto.stroke()*/
+                this.a = anguloEntreDosPuntos(
+                    this.x, 
+                    this.y, 
+                    comidas[mejorcandidato].x, 
+                    comidas[mejorcandidato].y
+                ) 
+                if(calculaDistancia(
+                    this.x,
+                    this.y,
+                    comidas[mejorcandidato].x,
+                    comidas[mejorcandidato].y
+                ) < 10){
+                    console.log("como")
+                    this.come()
+                }
+            }
+            come(){
+                this.e = 100
+            }
+            rebotePared(){
+                if(this.y < 0 || this.y > altura){
+                    this.a = calculoRebotePared(this.a , "horizontal")
+                }
+                if(this.x < 0 || this.x > anchura){
+                    this.a = calculoRebotePared(this.a , "vertical")
+                }
+            }
+        }
+        // Creo un conjunto de personas
+        let personas = []
+        // Les asigno una instancia de persona
+        for(let i = 0;i<500;i++){
+            personas[i] = new Persona();
+        } 
+        let comidas = []
+        for(let i = 0;i<15;i++){
+            comidas[i] = new Comida();
+        }
+        var temporizador = setTimeout("bucle()",1000)
+        function bucle(){
+            contexto.fillStyle = "rgba(255,255,255,0.1)"
+            contexto.fillRect(0,0,anchura,altura)
+            for(let i = 0;i<comidas.length;i++){
+                comidas[i].dibuja(contexto);
+            }
+            // Para cada una de las personas
+            for(let i = 0;i<personas.length;i++){
+                // Mueve a la persona
+                personas[i].mueve();
+                // Dibuja a la persona
+                personas[i].dibuja(contexto);
+                // constantemente miramos que comida tenemos mas cerca
+                if(personas[i].getEnergia() < 10){
+                    personas[i].buscaComida(comidas);
+                }
+                // Matamos a la persona?
+                if(personas[i].getEnergia() < 0){
+                    personas.splice(i,1)
+                }
+            } 
+            
+            clearTimeout(temporizador)
+            temporizador = setTimeout("bucle()",100)
+        }
+        
+    </script>
+</body>
+</html>
