@@ -1,14 +1,30 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Microphone Data Capture</title>
+    <title>IA</title>
+    <style>
+        html,body{background:white;color:black;font-family:sans-serif;}
+        canvas{background:white;border:1px solid grey;padding:20px;border-radius:5px;width:100%;box-sizing: border-box;}
+        h1,input,button{font-size:100px;padding:0px;margin:0px;}
+    </style>
 </head>
 <body>
+    <h2>Zona de resultados</h2>
     <h1>Lo que oigo es: <span id="resultado"></span></h1>
-    <canvas id="lienzo0" width=1024 height=100></canvas>
+    <table>
+        <tr>
+            <td>
+                <canvas id="lienzo0" width=1024 height=100></canvas>
     <canvas id="lienzo" width=1024 height=100></canvas>
-    <canvas id="neuronas" width=512 height=512></canvas>
+            </td>
+            
+            <td>
+            <canvas id="neuronas" width=512 height=512></canvas>
+            </td>
+        </tr>
+    </table>
+    <h2>Zona de entrenamiento</h2>
+    
     <input type="text" id="nombre">
     <button id="enviar">Enviar</button>
     <script>
@@ -42,7 +58,7 @@
         console.log(neuronas)
         var neuronasdib = []
         for(let i = 0;i<neuronas.length;i++){
-            neuronasdib.push({x:Math.random()*512,y:Math.random()*512,r:5})
+            neuronasdib.push({x:(100+(Math.random()*(512-200))),y:(100+(Math.random()*(512-200))),r:5})
         }
         async function getMicrophoneData() {
             try {
@@ -86,7 +102,10 @@
                     for(let i = 0;i<datosEntrada.length;i++){
                         
                         let neurona = ""
+                        
+                            
                         for(let j = i;j<i+3;j++){
+                            
                             if(Math.round(datosEntrada[j]*50) > 1){
                                 neurona+="100"
                             }
@@ -99,6 +118,7 @@
                             
                             
                         }
+                        //console.log(neurona)
                         for(let j = 0;j<neuronas.length;j++){
                             //console.log(neurona,neuronas[j])
                             if(neurona == neuronas[j]){
@@ -109,33 +129,77 @@
                     }
                     contextoneuronas.clearRect(0,0,512,512)
                     for(let i = 0;i<neuronas.length;i++){
+                        
+                        
+                        try{
+                            contextoneuronas.lineWidth = 1
+                            contextoneuronas.beginPath()
+                            contextoneuronas.moveTo(neuronasdib[i].x,neuronasdib[i].y)
+                            contextoneuronas.lineTo(neuronasdib[i+1].x,neuronasdib[i+1].y)
+                            contextoneuronas.stroke()
+                        }catch(error){
+                            
+                        }
+                        try{
+                            for(let j = 0;j<activacion[i]/10+5;j++){
+                                contextoneuronas.lineWidth = j
+                                contextoneuronas.beginPath()
+                                contextoneuronas.moveTo(neuronasdib[i].x,neuronasdib[i].y)
+                                contextoneuronas.lineTo(
+                                    neuronasdib[i].x+(neuronasdib[i+1].x-neuronasdib[i].x)/j,
+                                    neuronasdib[i].y+(neuronasdib[i+1].y-neuronasdib[i].y)/j
+                                )
+                                contextoneuronas.stroke()
+                            }
+                        }catch(error){
+
+                        }
+                        try{
+                            for(let j = 0;j<activacion[i]/10+5;j++){
+                                contextoneuronas.lineWidth = j
+                                contextoneuronas.beginPath()
+                                contextoneuronas.moveTo(neuronasdib[i].x,neuronasdib[i].y)
+                                contextoneuronas.lineTo(
+                                    neuronasdib[i].x+(neuronasdib[i-1].x-neuronasdib[i].x)/j,
+                                    neuronasdib[i].y+(neuronasdib[i-1].y-neuronasdib[i].y)/j
+                                )
+                                contextoneuronas.stroke()
+                            }
+                        }catch(error){
+                            
+                        }
+                        
+                    }
+                    for(let i = 0;i<neuronas.length;i++){
                         contextoneuronas.fillStyle = "black"
                         contextoneuronas.beginPath()
                         contextoneuronas.arc(neuronasdib[i].x,neuronasdib[i].y,activacion[i]/10+5,0,Math.PI*2)
                         contextoneuronas.fill()
-                        
-                        if(i != neuronas.length-1){
-                            contextoneuronas.beginPath()
-
-                            contextoneuronas.moveTo(neuronasdib[i].x,neuronasdib[i].y)
-                            contextoneuronas.lineTo(neuronasdib[i+1].x,neuronasdib[i+1].y)
-                            contextoneuronas.stroke()
-                        }
+                        contextoneuronas.fillStyle = "white"
+                        contextoneuronas.beginPath()
+                        contextoneuronas.arc(neuronasdib[i].x,neuronasdib[i].y,(activacion[i]/10+5)/2,0,Math.PI*2)
+                        contextoneuronas.fill()
                     }
-                    
                     mejorcandidato = 0
                     suma = 10000000
+                    document.getElementById("resultado").innerHTML = ""
                     for(let t = 0;t<memoria.length;t++){
                         misuma = 0
                         for(let u = 0;u<memoria[t].datos.length;u++){
                             misuma += Math.abs(memoria[t].datos[u] - activacion[u])
+                           // console.log(misuma)
                         }
-                        if(misuma < suma){
+                        //console.log("-")
+                        /*if(misuma < suma){
                             suma = misuma
                             mejorcandidato = t
-                        }
+                        }*/
+                        //consolel.log(memoria[t].nombre)
+                        document.getElementById("resultado").innerHTML += "<span style='font-size:"+(100-misuma/30)+"px'>"+memoria[t].nombre+"</span>"
+                       // console.log(memoria[t].nombre,misuma)
                     }
-                    document.getElementById("resultado").innerHTML = memoria[mejorcandidato].nombre
+                    
+                    //document.getElementById("resultado").innerHTML = memoria[mejorcandidato].nombre
                 };
             } catch (err) {
                 console.error('Error accessing the microphone', err);
