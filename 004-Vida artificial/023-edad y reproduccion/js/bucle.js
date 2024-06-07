@@ -4,22 +4,22 @@ function bucle(){
     for(let i = 0;i<comidas.length;i++){
         comidas[i].dibuja(contexto);
     }
+    for(let i = 0;i<hogares.length;i++){
+        hogares[i].dibuja(contexto);
+    }
     // Para cada una de las personas
     for(let i = 0;i<personas.length;i++){
         // Mueve a la persona
-        personas[i].mueve();
-        // Dibuja a la persona
-        personas[i].dibuja(contexto);
-        // constantemente miramos que comida tenemos mas cerca
-        if(personas[i].getEnergia() < 10){
-            personas[i].buscaComida(comidas);
-        }
-        // Matamos a la persona?
+        personas[i].vive();
         if(personas[i].getEnergia() < 0){
             personas.splice(i,1)
+            //console.log("muerte por energia")
+        }else if(personas[i].getEdad() > 100){
+            personas.splice(i,1)
+            //console.log("muerte por edad")
         }
     } 
-
+    //console.log(personas.length)
     clearTimeout(temporizador)
     temporizador = setTimeout("bucle()",0)
 }
