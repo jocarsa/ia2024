@@ -5,7 +5,7 @@ class Hogar extends Entidad{
     dibuja(contexto){
         contexto.fillStyle = "blue"
         contexto.beginPath()     
-        contexto.arc(this.x,this.y,5,0,Math.PI*2)
+        contexto.arc(this.x,this.y,2,0,Math.PI*2)
         contexto.fill()
     }
 }

@@ -1,5 +1,5 @@
 // Les asigno una instancia de persona
-for(let i = 0;i<100000;i++){
+for(let i = 0;i<100;i++){
     personas[i] = new Persona((Math.random()-0.5)/40);
 } 
 
