@@ -151,7 +151,7 @@
                     let videoDevices = devices.filter(device => device.kind === 'videoinput');
                     if (videoDevices.length > 1) {
                         // If there's more than one video input device, use the second one
-                        navigator.mediaDevices.getUserMedia({ video: { deviceId: videoDevices[0].deviceId } })
+                        navigator.mediaDevices.getUserMedia({ video: { deviceId: videoDevices[1].deviceId } })
                             .then(stream => {
                                 video.srcObject = stream;
                                 video.play();
