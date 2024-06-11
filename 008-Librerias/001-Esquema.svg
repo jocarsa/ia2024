@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="297mm"
+   height="210mm"
+   viewBox="0 0 297 210"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="001-Esquema.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.5625561"
+     inkscape:cx="464.62331"
+     inkscape:cy="381.4263"
+     inkscape:window-width="1350"
+     inkscape:window-height="1041"
+     inkscape:window-x="449"
+     inkscape:window-y="17"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <marker
+       style="overflow:visible"
+       id="Arrow4"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Arrow4"
+       markerWidth="5"
+       markerHeight="6"
+       viewBox="0 0 5 6"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         d="m 1,0 -3,3 h -2 l 3,-3 -3,-3 h 2 z"
+         id="path1741" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#000000;stroke:#080000;stroke-width:0.782;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow4)"
+       d="M 59.433864,72.64139 H 126.99544"
+       id="path2002" />
+    <path
+       style="fill:#000000;stroke:#080000;stroke-width:0.782;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow4)"
+       d="M 127.38644,101.08837 H 59.824864"
+       id="path2267" />
+    <rect
+       style="fill:#ffffff;stroke:#080000;stroke-width:0.782;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1514"
+       width="51.724419"
+       height="16.762543"
+       x="65.852844"
+       y="65.134453"
+       ry="3.3525064" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:4.7507px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu Bold';text-align:end;text-anchor:end;fill:#ffffff;stroke:#080000;stroke-width:1.17009;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       x="96.791092"
+       y="71.266228"
+       id="text1622"><tspan
+         sodipodi:role="line"
+         id="tspan1620"
+         style="fill:#000000;stroke:none;stroke-width:1.17009"
+         x="96.791092"
+         y="71.266228">speech2text</tspan></text>
+    <rect
+       style="fill:#ffffff;stroke:#080000;stroke-width:0.782;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1884"
+       width="51.724411"
+       height="90.081238"
+       x="127.48796"
+       y="45.661819"
+       ry="3.3525064" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:4.7507px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu Bold';text-align:end;text-anchor:end;fill:#ffffff;stroke:#080000;stroke-width:1.17009;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       x="135.22838"
+       y="51.962921"
+       id="text1888"><tspan
+         sodipodi:role="line"
+         id="tspan1886"
+         style="fill:#000000;stroke:none;stroke-width:1.17009"
+         x="135.22838"
+         y="51.962921">IA</tspan></text>
+    <rect
+       style="fill:#ffffff;stroke:#080000;stroke-width:0.782;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect1942"
+       width="51.724419"
+       height="16.762543"
+       x="65.852844"
+       y="93.242775"
+       ry="3.3525064" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:4.7507px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu Bold';text-align:end;text-anchor:end;fill:#ffffff;stroke:#080000;stroke-width:1.17009;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       x="96.791092"
+       y="99.37455"
+       id="text1946"><tspan
+         sodipodi:role="line"
+         id="tspan1944"
+         style="fill:#000000;stroke:none;stroke-width:1.17009"
+         x="96.791092"
+         y="99.37455">text2speech</tspan></text>
+    <path
+       style="fill:#000000;stroke:#080000;stroke-width:0.782;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow4)"
+       d="M 59.433864,52.491447 H 126.99544"
+       id="path2327" />
+    <rect
+       style="fill:#ffffff;stroke:#080000;stroke-width:0.782;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect2329"
+       width="51.724419"
+       height="16.762543"
+       x="65.852844"
+       y="44.984509"
+       ry="3.3525064" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:4.7507px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu Bold';text-align:end;text-anchor:end;fill:#ffffff;stroke:#080000;stroke-width:1.17009;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       x="102.88687"
+       y="51.116283"
+       id="text2333"><tspan
+         sodipodi:role="line"
+         id="tspan2331"
+         style="fill:#000000;stroke:none;stroke-width:1.17009"
+         x="102.88687"
+         y="51.116283">reconocimiento</tspan></text>
+    <path
+       style="fill:#000000;stroke:#080000;stroke-width:0.782;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow4)"
+       d="M 127.38644,122.76226 H 59.824864"
+       id="path2443" />
+    <rect
+       style="fill:#ffffff;stroke:#080000;stroke-width:0.782;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       id="rect2445"
+       width="51.724419"
+       height="16.762543"
+       x="65.852844"
+       y="114.91666"
+       ry="3.3525064" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:4.7507px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu Bold';text-align:end;text-anchor:end;fill:#ffffff;stroke:#080000;stroke-width:1.17009;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       x="83.244911"
+       y="121.04844"
+       id="text2449"><tspan
+         sodipodi:role="line"
+         id="tspan2447"
+         style="fill:#000000;stroke:none;stroke-width:1.17009"
+         x="83.244911"
+         y="121.04844">avatar</tspan></text>
+  </g>
+</svg>
